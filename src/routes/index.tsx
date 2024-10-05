@@ -1,13 +1,19 @@
 import React, {useEffect, useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import NonAuthenticatedRoutes from './NonAuthenticatedRoutes';
 import AuthenticatedRoutes from './AuthenticatedRoutes';
-const CheckUser = () => {
-  const [user, setUser] = useState<string | null>();
+
+const AppStack = () => {
+  const [user, setUser] = useState<string | null>(null);
+
   useEffect(() => {
-    const userExists = localStorage.getItem('user') || null;
-    setUser(userExists);
+    const checkUser = async () => {
+      const userExists = await AsyncStorage.getItem('user');
+      setUser(userExists);
+    };
+    checkUser();
   }, []);
+
   return user ? <AuthenticatedRoutes /> : <NonAuthenticatedRoutes />;
 };
-
-export default CheckUser;
+export default AppStack;
