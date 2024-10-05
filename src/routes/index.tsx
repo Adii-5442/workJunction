@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import NonAuthenticatedRoutes from './NonAuthenticatedRoutes';
-import AuthenticatedRoutes from './AuthenticatedRoutes';
+import NonAuthenticatedRoutes from './nonAuthRoutes';
+import AuthenticatedRoutes from './authRoutes';
 
 const AppStack = () => {
   const [user, setUser] = useState<string | null>(null);

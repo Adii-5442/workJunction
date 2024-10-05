@@ -19,10 +19,10 @@ const PrimaryButton = ({ onPress, text, isPrimary = true }) => (
   </TouchableOpacity>
 );
 
-const LandingScreen = () => {
+const LandingScreen = (props) => {
   const fadeAnim = new Animated.Value(0);
   const slideAnim = new Animated.Value(20);
-  const [primaryButton, setprimaryButton] = useState<string>('owner')
+  const [primaryButton, setprimaryButton] = useState<string>('labour')
   
 
   useEffect(() => {
@@ -41,12 +41,12 @@ const LandingScreen = () => {
   }, []);
   const handleOwnerNavigation = () => {
     setprimaryButton("owner")
-    //navigation.navigate('OwnerDashboard');
+    props.navigation.navigate('OwnerDashboard');
   };
 
   const handleLabourNavigation = () => {
     setprimaryButton("labour")
-    //navigation.navigate('LabourDashboard');
+    props.navigation.navigate('LabourDashboard');
   };
 
   return (

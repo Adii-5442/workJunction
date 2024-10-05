@@ -1,10 +1,10 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import LandingScreen from '../screens/LandingScreen';
+import LandingScreen from '../../screens/LandingScreen';
 
 const Stack = createNativeStackNavigator();
 
-const NonAuthenticatedRoutes = () => {
+const LabourRoutes = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown:false}}>
       <Stack.Screen name="LandingScreen" component={LandingScreen} />
@@ -12,4 +12,4 @@ const NonAuthenticatedRoutes = () => {
   );
 };
 
-export default NonAuthenticatedRoutes;
+export default LabourRoutes;
