@@ -8,50 +8,24 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   Platform,
+  Image,
+  Dimensions,
 } from 'react-native';
-import { TextInput, Text, HelperText } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/Ionicons';  // Changed from Expo icons
+import { TextInput, Text } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+
+const { width } = Dimensions.get('window');
 
 const LoginScreen = () => {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [phoneError, setPhoneError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
   const navigation = useNavigation();
 
-  const validatePhone = (number) => {
-    const phoneRegex = /^[0-9]{10}$/;
-    return phoneRegex.test(number);
-  };
-
-  const validatePassword = (pass) => {
-    return pass.length >= 6;
-  };
-
   const handleLogin = () => {
-    let isValid = true;
-
-    if (!validatePhone(phone)) {
-      setPhoneError('Please enter a valid 10-digit phone number');
-      isValid = false;
-    } else {
-      setPhoneError('');
-    }
-
-    if (!validatePassword(password)) {
-      setPasswordError('Password must be at least 6 characters');
-      isValid = false;
-    } else {
-      setPasswordError('');
-    }
-
-    if (isValid) {
-      // Proceed with login
-      console.log('Login successful');
-      // Add your navigation or authentication logic here
-    }
+    // Add your login logic here
+    console.log('Login attempted with:', { phone, password });
   };
 
   return (
@@ -61,76 +35,85 @@ const LoginScreen = () => {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.content}
         >
-          <View style={styles.headerContainer}>
-            <Text style={styles.title}>Welcome back</Text>
-            <Text style={styles.subtitle}>Sign in to continue</Text>
+          {/* Logo Section */}
+          <View style={styles.logoContainer}>
+            <Image
+              source={require('../assets/labour.png')}
+              style={styles.logo}
+              resizeMode="contain"
+            />
           </View>
 
+          {/* Header Section */}
+          <View style={styles.headerContainer}>
+            <Text style={styles.title}>Welcome</Text>
+            <Text style={styles.subtitle}>Please sign in to continue</Text>
+          </View>
+
+          {/* Form Section */}
           <View style={styles.formContainer}>
             <TextInput
               mode="outlined"
               label="Phone Number"
               value={phone}
-              onChangeText={(text) => {
-                setPhone(text.replace(/[^0-9]/g, ''));
-                if (phoneError) setPhoneError('');
-              }}
+              onChangeText={setPhone}
               keyboardType="phone-pad"
               maxLength={10}
               left={<TextInput.Affix text="+91 " />}
-              error={!!phoneError}
               style={styles.input}
               outlineStyle={styles.inputOutline}
               theme={{
                 colors: {
                   primary: '#2563eb',
+                  background: '#ffffff',
                 }
               }}
             />
-            <HelperText type="error" visible={!!phoneError}>
-              {phoneError}
-            </HelperText>
 
             <TextInput
               mode="outlined"
               label="Password"
               value={password}
-              onChangeText={(text) => {
-                setPassword(text);
-                if (passwordError) setPasswordError('');
-              }}
+              onChangeText={setPassword}
               secureTextEntry={!showPassword}
-              error={!!passwordError}
               style={styles.input}
               outlineStyle={styles.inputOutline}
               theme={{
                 colors: {
                   primary: '#2563eb',
+                  background: '#ffffff',
                 }
               }}
               right={
                 <TextInput.Icon
                   icon={showPassword ? 'eye-off' : 'eye'}
                   onPress={() => setShowPassword(!showPassword)}
+                  color="#666666"
                 />
               }
             />
-            <HelperText type="error" visible={!!passwordError}>
-              {passwordError}
-            </HelperText>
+          </View>
+
+          {/* Action Buttons */}
+          <View style={styles.actionContainer}>
+            <TouchableOpacity 
+              style={styles.primaryButton}
+              onPress={handleLogin}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.buttonText}>Sign In</Text>
+              <Icon name="arrow-forward" size={20} color="#ffffff" style={styles.buttonIcon} />
+            </TouchableOpacity>
 
             <TouchableOpacity style={styles.forgotPassword}>
               <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
             </TouchableOpacity>
-          </View>
 
-          <TouchableOpacity 
-            style={styles.loginButton}
-            onPress={handleLogin}
-            activeOpacity={0.8}
-          >
-            <Icon name="arrow-forward" size={24} color="#ffffff" />
-          </TouchableOpacity>
+            {/* Create Account Link */}
+            <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+              <Text style={styles.createAccountText}>Don't have an account? Create an account</Text>
+            </TouchableOpacity>
+          </View>
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </SafeAreaView>
@@ -145,10 +128,26 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     padding: 24,
-    justifyContent: 'space-between',
+  },
+  logoContainer: {
+    width: 80,
+    height: 80,
+    marginTop: 40,
+    marginBottom: 40,
+    alignSelf: 'center',
+    borderRadius: 20,
+    overflow: 'hidden',
+    backgroundColor: '#f2f2f2',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logo: {
+    width: '100%',
+    height: '100%',
   },
   headerContainer: {
-    marginTop: 40,
+    alignItems: 'center',
+    marginBottom: 40,
   },
   title: {
     fontSize: 32,
@@ -159,46 +158,64 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 17,
     color: '#666666',
+    textAlign: 'center',
   },
   formContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    marginBottom: 40,
+    width: '100%',
+    marginBottom: 24,
   },
   input: {
     backgroundColor: '#ffffff',
-    marginVertical: 8,
+    marginBottom: 16,
   },
   inputOutline: {
-    borderRadius: 8,
+    borderRadius: 12,
+    borderWidth: 1,
   },
-  forgotPassword: {
-    alignSelf: 'flex-end',
-    marginTop: 16,
+  actionContainer: {
+    alignItems: 'center',
   },
-  forgotPasswordText: {
-    color: '#2563eb',
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  loginButton: {
-    position: 'absolute',
-    bottom: 40,
-    right: 24,
+  primaryButton: {
+    flexDirection: 'row',
     backgroundColor: '#2563eb',
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    borderRadius: 12,
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 4,
+    elevation: 2,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+  },
+  buttonText: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: '600',
+    marginRight: 8,
+  },
+  buttonIcon: {
+    marginLeft: 4,
+  },
+  forgotPassword: {
+    marginTop: 16,
+    padding: 8,
+  },
+  forgotPasswordText: {
+    color: '#666666',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  createAccountText: {
+    color: '#2563eb',
+    fontSize: 14,
+    fontWeight: '500',
+    marginTop: 24,
   },
 });
 
